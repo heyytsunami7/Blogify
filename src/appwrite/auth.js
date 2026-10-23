@@ -1,4 +1,3 @@
-
 import envSetup from "../config/envsetup";
 import { Client, Account, ID } from "appwrite";
 
