@@ -1,8 +1,8 @@
+import React from 'react'
 
-
-function Container() {
+function Container({children}) {
   return (
-    <div>Container</div>
+    <div>{children}</div>
   )
 }
 
