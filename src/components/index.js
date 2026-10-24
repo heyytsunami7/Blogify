@@ -3,11 +3,12 @@ import Footer from "./Footer/Footer"
 import Container from "./Container/Container"
 import Logo from "./Logo"
 import LogoutBtn from "./Header/LogoutBtn"
-
+import Buton from "./Button"
 export {
    Header,
    Footer,
    Logo,
    Container,
-   LogoutBtn
+   LogoutBtn,
+   Buton
 }
