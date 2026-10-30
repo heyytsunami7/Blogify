@@ -4,11 +4,14 @@ import Container from "./Container/Container"
 import Logo from "./Logo"
 import LogoutBtn from "./Header/LogoutBtn"
 import Buton from "./Button"
+import RTE from "./RTE.jsx"
+
 export {
    Header,
    Footer,
    Logo,
    Container,
    LogoutBtn,
-   Buton
+   Buton,
+   RTE
 }
