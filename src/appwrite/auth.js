@@ -49,7 +49,10 @@ export class AuthService {
         try {
             return await this.account.get();
         } catch (error) {
-            console.error("Appwrite service :: getCurrentUser :: error", error);
+            // 401 just means nobody is logged in (guest), which is expected
+            if (error?.code !== 401) {
+                console.error("Appwrite service :: getCurrentUser :: error", error);
+            }
             return null;
         }
     }
