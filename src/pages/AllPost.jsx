@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect , useState} from "react";
 import { Container, PostCard } from "../components/index";
 import appwriteService from "../appwrite/config";
 
 function AllPost() {
   const [posts, setPosts] = useState([]);
   useEffect(() => {}, []);
-  appwriteService.getPosts([]).then((post) => {
+  appwriteService.getPosts([]).then((posts) => {
     if (posts) {
       setPosts(posts.documents);
     }
@@ -13,7 +13,7 @@ function AllPost() {
   return (
     <div>
       <Container>
-        {post.map((post) => (
+        {posts.map((post) => (
           <PostCard key={post.$id} post={post} />
         ))}
       </Container>

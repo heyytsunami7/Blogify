@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect ,useState, useParams} from "react";
 import { Container, PostForm } from "../components/index";
 import appwriteService from "../appwrite/config"
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ function EditPost() {
   return post ? (
     <div>
         <Container>
-            <Postform post={post}/>
+            <PostForm post={post}/>
         </Container>
     </div>
   ) : null
