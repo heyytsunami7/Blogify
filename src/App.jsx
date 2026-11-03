@@ -4,6 +4,7 @@ import { useState , useEffect} from 'react'
 import authService from "./appwrite/auth"
 import {login, logout} from "./store/authSlice"
 import { Header , Footer} from "./components/index"
+import { Outlet } from 'react-router-dom'
 
 
 function App() {
@@ -22,13 +23,13 @@ function App() {
     })
     .finally(()=>{setLoading(false)}
     )
-  },[])
+  })
     
   return !loading ? (
     <div>
       <Header/>
       <main>
-         {/* <Outlet/> */}
+         <Outlet/>
       </main>
       <Footer/>
     </div>
