@@ -1,32 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import authService from "../appwrite/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../store/authSlice";
-import {Input ,Button , Logo}  from "./index";
+import { Input, Button, Logo } from "./index";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
 function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [register, handleSubmit] = useForm();
-  const [error, SetError] = useState("");
+  const { register, handleSubmit } = useForm();
+  const [error, setError] = useState("");
 
   const create = async (data) => {
-    SetError("");
+    setError("");
     try {
-      const userData = await authService.createAccount(data);
-      if (userData) {
+      const session = await authService.createAccount(data);
+      if (session) {
         const userData = await authService.getCurrentUser();
         if (userData) {
-          dispatch(login(userData));
+          dispatch(login({ userData }));
           navigate("/");
         }
       }
     } catch (error) {
-      SetError(error.message);
+      setError(error.message);
     }
   };
+
   return (
     <div className="flex items-center justify-center">
       <div
@@ -50,16 +51,26 @@ function Signup() {
           </Link>
         </p>
         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-        <form onSubmit={handleSubmit(create)}>
+        <form onSubmit={handleSubmit(create)} className="mt-8">
           <div className="space-y-5">
             <Input
               label="Full Name: "
               placeholder="Enter your full name"
-              {...register("name", {
+              {...register("name", { required: true })}
+            />
+            <Input
+              label="Email: "
+              placeholder="Enter your email"
+              type="email"
+              {...register("email", {
                 required: true,
+                validate: {
+                  matchPatern: (value) =>
+                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                    "Email address must be a valid address",
+                },
               })}
             />
-
             <Input
               label="Password: "
               placeholder="Enter your Password: "
