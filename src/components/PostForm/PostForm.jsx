@@ -11,13 +11,14 @@ function PostForm({ post }) {
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug: post?.slug || "",
+        slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "active",
       },
     });
 
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => state.auth.userData);
+
   const submit = async (data) => {
     if (post) {
       const file = data.image[0]
@@ -48,6 +49,7 @@ function PostForm({ post }) {
       }
     }
   };
+
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {
       return value
@@ -55,21 +57,21 @@ function PostForm({ post }) {
         .toLowerCase()
         .replace(/[^a-zA-Z\d\s]+/g, "-")
         .replace(/\s/g, "-");
-
-      return "";
     }
-  });
+    return "";
+  }, []);
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug", slugTransform(value.title, { shouldvalidate: true }));
+        setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
     });
     return () => {
-      subscription.unsubsribe();
+      subscription.unsubscribe();
     };
   }, [watch, slugTransform, setValue]);
+
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
       <div className="w-2/3 px-2">
