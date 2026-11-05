@@ -11,7 +11,7 @@ function App() {
   const [loading , setLoading] = useState(true)
   const dispatch = useDispatch()
 
-  useEffect(()=>{
+   useEffect(()=>{
     authService.getCurrentUser()
     .then((userData)=>{
        if(userData){
@@ -21,9 +21,8 @@ function App() {
         dispatch(logout())
        }
     })
-    .finally(()=>{setLoading(false)}
-    )
-  })
+    .finally(()=>{setLoading(false)})
+  }, [])
     
   return !loading ? (
     <div>

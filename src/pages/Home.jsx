@@ -7,12 +7,12 @@ function Home() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    appwriteServices.getPost().then((posts) => {
+    appwriteServices.getPosts().then((posts) => {
       if (posts) {
         setPosts(posts.documents);
       }
     });
-  });
+  }, []);
   if (posts.length === 0) {
     return (
       <div>
@@ -25,9 +25,9 @@ function Home() {
   return (
     <div>
         <Container>
-            {posts.map((post)=>{
-                <PostCard {...post}/>
-            })}
+            {posts.map((post)=>(
+                <PostCard key={post.$id} {...post}/>
+            ))}
         </Container>
     </div>
   )
