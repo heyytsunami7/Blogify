@@ -9,7 +9,7 @@ const modules = {
     ['bold', 'italic', 'underline', 'strike'],
     [{ list: 'ordered' }, { list: 'bullet' }],
     [{ align: [] }],
-    ['link', 'image'],
+    ['link'],
     ['clean'],
   ],
 };
