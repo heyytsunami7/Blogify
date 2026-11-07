@@ -1,9 +1,17 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button, RTE, Input, Select } from "../index";
 import appwriteService from "../../appwrite/config";
+
+// Slug is the Appwrite document ID: a-z 0-9 - _ ., max 36 chars, no leading special char.
+const slugTransform = (value) =>
+  value
+    .toLowerCase()
+    .replace(/[^a-z\d]+/g, "-")
+    .slice(0, 36)
+    .replace(/^-+|-+$/g, "");
 
 function PostForm({ post }) {
   const navigate = useNavigate();
@@ -29,6 +37,7 @@ function PostForm({ post }) {
       }
       const dbPost = await appwriteService.updatePost(post.$id, {
         ...data,
+        userId: post.userId,
         featuredImage: file ? file.$id : undefined,
       });
       if (dbPost) {
@@ -50,27 +59,16 @@ function PostForm({ post }) {
     }
   };
 
-  const slugTransform = useCallback((value) => {
-    if (value && typeof value === "string") {
-      return value
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-zA-Z\d\s]+/g, "-")
-        .replace(/\s/g, "-");
-    }
-    return "";
-  }, []);
-
+  // The slug is the document ID, so it is generated for new posts and never changes.
   useEffect(() => {
+    if (post) return;
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug", slugTransform(value.title), { shouldValidate: true });
+        setValue("slug", slugTransform(value.title || ""), { shouldValidate: true });
       }
     });
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [watch, slugTransform, setValue]);
+    return () => subscription.unsubscribe();
+  }, [watch, setValue, post]);
 
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
@@ -85,12 +83,8 @@ function PostForm({ post }) {
           label="Slug :"
           placeholder="Slug"
           className="mb-4"
+          readOnly
           {...register("slug", { required: true })}
-          onInput={(e) => {
-            setValue("slug", slugTransform(e.currentTarget.value), {
-              shouldValidate: true,
-            });
-          }}
         />
         <RTE
           label="Content :"

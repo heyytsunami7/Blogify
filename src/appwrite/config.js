@@ -38,13 +38,14 @@ export class Service {
         }
     }
 
-    async updatePost(slug, { title, content, featuredImage, status }) {
+    async updatePost(slug, { title, content, featuredImage, status, userId }) {
         try {
             return await this.databases.updateDocument(
                 envSetup.appwriteDatabaseId,
                 envSetup.appwriteCollectionId,
                 slug,
-                { title, content, featuredImage, status }
+                { title, content, featuredImage, status },
+                postPermissions(userId, status)
             );
         } catch (error) {
             console.error("Appwrite service :: updatePost :: error", error);
