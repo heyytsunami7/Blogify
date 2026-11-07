@@ -91,12 +91,19 @@ export class Service {
         }
     }
 
-    async uploadFile(file) {
+    // Images are public to read; only the uploader can change or delete them.
+    async uploadFile(file, userId) {
         try {
+            const owner = Role.user(userId);
             return await this.bucket.createFile(
                 envSetup.appwriteBucketId,
                 ID.unique(),
-                file
+                file,
+                [
+                    Permission.read(Role.any()),
+                    Permission.update(owner),
+                    Permission.delete(owner),
+                ]
             );
         } catch (error) {
             console.error("Appwrite service :: uploadFile :: error", error);
@@ -114,8 +121,9 @@ export class Service {
         }
     }
 
-    getFilePreview(fileId) {
-        return this.bucket.getFilePreview(envSetup.appwriteBucketId, fileId);
+    // getFilePreview needs image transformations, which the Free plan blocks.
+    getFileView(fileId) {
+        return this.bucket.getFileView(envSetup.appwriteBucketId, fileId);
     }
 }
 
