@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
+import DOMPurify from "dompurify";
 import { useSelector } from "react-redux";
 
 export default function Post() {
@@ -59,7 +60,7 @@ export default function Post() {
                     <h1 className="text-2xl font-bold">{post.title}</h1>
                 </div>
                 <div className="browser-css">
-                    {parse(post.content)}
+                    {parse(DOMPurify.sanitize(post.content))}
                 </div>
             </Container>
         </div>
