@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+/* Preflight strips default element styles; restore them for rendered post content. */
+.browser-css { line-height: 1.75; }
+.browser-css h1 { font-size: 2rem; font-weight: 700; margin: 1.5rem 0 0.75rem; }
+.browser-css h2 { font-size: 1.5rem; font-weight: 700; margin: 1.25rem 0 0.75rem; }
+.browser-css h3 { font-size: 1.25rem; font-weight: 600; margin: 1rem 0 0.5rem; }
+.browser-css p { margin-bottom: 1rem; }
+.browser-css a { color: #2563eb; text-decoration: underline; }
+.browser-css ul,
+.browser-css ol { padding-left: 1.5rem; margin-bottom: 1rem; }
+.browser-css ul { list-style-type: disc; }
+.browser-css ol { list-style-type: decimal; }
+.browser-css li[data-list="bullet"] { list-style-type: disc; }
+.browser-css li[data-list="ordered"] { list-style-type: decimal; }
+.browser-css .ql-ui { display: none; }
+.browser-css .ql-align-center { text-align: center; }
+.browser-css .ql-align-right { text-align: right; }
+.browser-css .ql-align-justify { text-align: justify; }
