@@ -17,6 +17,7 @@ import AllPost from "../pages/AllPost.jsx"
 import EditPost from "../pages/EditPost.jsx"
 import Home from "../pages/Home.jsx"
 import Post from "../pages/Post.jsx"
+import NotFound from "../pages/NotFound.jsx"
 
 export {
    Header,
@@ -37,5 +38,6 @@ export {
    AllPost,
    EditPost,
    Home,
-   Post
+   Post,
+   NotFound
 }
