@@ -1,9 +1,9 @@
 const required = {
-    appwriteUrl: "PUBLIC_APPWRITE_URL",
-    appwriteProjectId: "PUBLIC_APPWRITE_PROJECT_ID",
-    appwriteDatabaseId: "PUBLIC_APPWRITE_DATABASE_ID",
-    appwriteCollectionId: "PUBLIC_APPWRITE_COLLECTION_ID",
-    appwriteBucketId: "PUBLIC_APPWRITE_BUCKET_ID",
+    appwriteUrl: "BLOGIFY_APPWRITE_URL",
+    appwriteProjectId: "BLOGIFY_APPWRITE_PROJECT_ID",
+    appwriteDatabaseId: "BLOGIFY_APPWRITE_DATABASE_ID",
+    appwriteCollectionId: "BLOGIFY_APPWRITE_COLLECTION_ID",
+    appwriteBucketId: "BLOGIFY_APPWRITE_BUCKET_ID",
 };
 
 const envSetup = {};
