@@ -25,6 +25,7 @@ export default function Post() {
     }, [slug, navigate]);
 
     const deletePost = () => {
+        if (!window.confirm("Delete this post? This cannot be undone.")) return;
         appwriteService.deletePost(post.$id).then((status) => {
             if (status) {
                 appwriteService.deleteFile(post.featuredImage);
