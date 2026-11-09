@@ -19,6 +19,7 @@ import Home from "../pages/Home.jsx"
 import Post from "../pages/Post.jsx"
 import NotFound from "../pages/NotFound.jsx"
 import StoriesChart from "./StoriesChart.jsx"
+import AuthShell from "./AuthShell.jsx"
 export {
    Header,
    Footer,
@@ -33,6 +34,7 @@ export {
    PostForm,
    PostCard,
    AuthLayout,
+   AuthShell,
    Select,
    AddPost,
    AllPost,

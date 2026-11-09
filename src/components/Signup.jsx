@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import authService from "../appwrite/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../store/authSlice";
-import { Input, Button, Logo } from "./index";
+import { AuthShell, Input, Button } from "./index";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
 function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [error, setError] = useState("");
 
   const create = async (data) => {
@@ -28,62 +28,41 @@ function Signup() {
     }
   };
 
+  const message = error || errors.email?.message;
+
   return (
-    <div className="flex items-center justify-center">
-      <div
-        className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}
-      >
-        <div className="mb-2 flex justify-center">
-          <span className="inline-block w-full max-w-[100px]">
-            <Logo width="100%" />
-          </span>
-        </div>
-        <h2 className="text-center text-2xl font-bold leading-tight">
-          Sign up to create account
-        </h2>
-        <p className="mt-2 text-center text-base text-black/60">
-          Already have an account?&nbsp;
-          <Link
-            to="/login"
-            className="font-medium text-primary transition-all duration-200 hover:underline"
-          >
-            Sign In
-          </Link>
-        </p>
-        {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-        <form onSubmit={handleSubmit(create)} className="mt-8">
-          <div className="space-y-5">
-            <Input
-              label="Full Name: "
-              placeholder="Enter your full name"
-              {...register("name", { required: true })}
-            />
-            <Input
-              label="Email: "
-              placeholder="Enter your email"
-              type="email"
-              {...register("email", {
-                required: true,
-                validate: {
-                  matchPatern: (value) =>
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                    "Email address must be a valid address",
-                },
-              })}
-            />
-            <Input
-              label="Password: "
-              placeholder="Enter your Password: "
-              type="password"
-              {...register("password", { required: true })}
-            />
-            <Button type="submit" className="w-full">
-              Create Account
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <AuthShell
+      eyebrow="New here"
+      title={<>Start your first <span className="text-accent">story.</span></>}
+      perks={["Free for readers and writers", "A rich-text writing desk", "Publish whenever you're ready"]}
+    >
+      <h2 className="font-display text-[clamp(22px,2vw,28px)] font-extrabold tracking-[-0.04em]">Create account</h2>
+      <p className="mb-6 mt-2 text-fg2">
+        Already a member?{" "}
+        <Link to="/login" className="border-b-2 border-accent font-semibold text-fg">Sign in</Link>.
+      </p>
+      {message && (
+        <p role="alert" className="mb-5 rounded-[10px] border-l-4 border-danger bg-bg2 px-4 py-3 text-sm font-medium">{message}</p>
+      )}
+      <form onSubmit={handleSubmit(create)} className="space-y-5">
+        <Input label="Full name" placeholder="Your full name" {...register("name", { required: true })} />
+        <Input
+          label="Email"
+          placeholder="you@example.com"
+          type="email"
+          {...register("email", {
+            required: true,
+            validate: {
+              matchPatern: (value) =>
+                /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                "Email address must be a valid address",
+            },
+          })}
+        />
+        <Input label="Password" placeholder="At least 8 characters" type="password" {...register("password", { required: true })} />
+        <Button type="submit" className="w-full">Create account <span aria-hidden="true">→</span></Button>
+      </form>
+    </AuthShell>
   );
 }
 
