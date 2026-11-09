@@ -18,7 +18,7 @@ import EditPost from "../pages/EditPost.jsx"
 import Home from "../pages/Home.jsx"
 import Post from "../pages/Post.jsx"
 import NotFound from "../pages/NotFound.jsx"
-
+import StoriesChart from "./StoriesChart.jsx"
 export {
    Header,
    Footer,
@@ -39,5 +39,6 @@ export {
    EditPost,
    Home,
    Post,
-   NotFound
+   NotFound,
+   StoriesChart
 }
