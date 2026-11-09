@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -25,6 +25,7 @@ const parseTags = (value) => [
 
 function PostForm({ post }) {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
@@ -39,37 +40,44 @@ function PostForm({ post }) {
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
+    setError("");
     const tags = parseTags(data.tags);
-    if (post) {
-      const file = data.image[0]
-        ? await appwriteService.uploadFile(data.image[0], userData.$id)
-        : null;
-      if (file) {
-        appwriteService.deleteFile(post.featuredImage);
-      }
-      const dbPost = await appwriteService.updatePost(post.$id, {
-        ...data,
-        tags,
-        userId: post.userId,
-        featuredImage: file ? file.$id : undefined,
-      });
-      if (dbPost) {
-        navigate(`/post/${dbPost.$id}`);
-      }
-    } else {
-      const file = await appwriteService.uploadFile(data.image[0], userData.$id);
-      if (file) {
-        const fileId = file.$id;
-        data.featuredImage = fileId;
-        const dbPost = await appwriteService.createPost({
+    const image = data.image[0];
+    const file = image
+      ? await appwriteService.uploadFile(image, userData.$id)
+      : null;
+
+    if (image && !file) {
+      setError("Image upload failed. Please try again.");
+      return;
+    }
+
+    const dbPost = post
+      ? await appwriteService.updatePost(post.$id, {
           ...data,
           tags,
+          userId: post.userId,
+          featuredImage: file ? file.$id : undefined,
+        })
+      : await appwriteService.createPost({
+          ...data,
+          tags,
+          featuredImage: file.$id,
           userId: userData.$id,
         });
-        if (dbPost) {
-          navigate(`/post/${dbPost.$id}`);
-        }
-      }
+
+    if (dbPost) {
+      // Delete the old image only once the new one is safely saved.
+      if (post && file) appwriteService.deleteFile(post.featuredImage);
+      navigate(`/post/${dbPost.$id}`);
+    } else {
+      // Don't leave the new image orphaned in storage.
+      if (file) appwriteService.deleteFile(file.$id);
+      setError(
+        post
+          ? "Could not save your changes."
+          : "Could not create the post. A post with this title may already exist."
+      );
     }
   };
 
@@ -87,6 +95,7 @@ function PostForm({ post }) {
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
       <div className="w-2/3 px-2">
+        {error && <p className="text-red-600 mb-4">{error}</p>}
         <Input
           label="Title :"
           placeholder="Title"
