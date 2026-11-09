@@ -13,6 +13,16 @@ const slugTransform = (value) =>
     .slice(0, 36)
     .replace(/^-+|-+$/g, "");
 
+// "React, appwrite ,react" -> ["react", "appwrite"]; max 5 tags of 30 chars (matches the column size).
+const parseTags = (value) => [
+  ...new Set(
+    value
+      .split(",")
+      .map((tag) => tag.trim().toLowerCase().slice(0, 30))
+      .filter(Boolean)
+  ),
+].slice(0, 5);
+
 function PostForm({ post }) {
   const navigate = useNavigate();
   const { register, handleSubmit, watch, setValue, control, getValues } =
@@ -22,12 +32,14 @@ function PostForm({ post }) {
         slug: post?.$id || "",
         content: post?.content || "",
         status: post?.status || "published",
+        tags: post?.tags?.join(", ") || "",
       },
     });
 
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
+    const tags = parseTags(data.tags);
     if (post) {
       const file = data.image[0]
         ? await appwriteService.uploadFile(data.image[0], userData.$id)
@@ -37,6 +49,7 @@ function PostForm({ post }) {
       }
       const dbPost = await appwriteService.updatePost(post.$id, {
         ...data,
+        tags,
         userId: post.userId,
         featuredImage: file ? file.$id : undefined,
       });
@@ -50,6 +63,7 @@ function PostForm({ post }) {
         data.featuredImage = fileId;
         const dbPost = await appwriteService.createPost({
           ...data,
+          tags,
           userId: userData.$id,
         });
         if (dbPost) {
@@ -110,6 +124,12 @@ function PostForm({ post }) {
             />
           </div>
         )}
+        <Input
+          label="Tags (comma separated, max 5) :"
+          placeholder="react, appwrite"
+          className="mb-4"
+          {...register("tags")}
+        />
         <Select
           options={["published", "draft"]}
           label="Status"

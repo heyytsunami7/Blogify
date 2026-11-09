@@ -24,13 +24,13 @@ export class Service {
         this.bucket = new Storage(this.client);
     }
 
-    async createPost({ title, slug, content, featuredImage, status, userId }) {
+    async createPost({ title, slug, content, featuredImage, status, tags, userId }) {
         try {
             return await this.databases.createDocument(
                 envSetup.appwriteDatabaseId,
                 envSetup.appwriteCollectionId,
                 slug,
-                { title, content, featuredImage, status, userId },
+                { title, content, featuredImage, status, tags, userId },
                 postPermissions(userId, status)
             );
         } catch (error) {
@@ -38,13 +38,13 @@ export class Service {
         }
     }
 
-    async updatePost(slug, { title, content, featuredImage, status, userId }) {
+    async updatePost(slug, { title, content, featuredImage, status, tags, userId }) {
         try {
             return await this.databases.updateDocument(
                 envSetup.appwriteDatabaseId,
                 envSetup.appwriteCollectionId,
                 slug,
-                { title, content, featuredImage, status },
+                { title, content, featuredImage, status, tags },
                 postPermissions(userId, status)
             );
         } catch (error) {
