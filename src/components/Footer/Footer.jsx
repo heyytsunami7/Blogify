@@ -1,143 +1,41 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import Logo from '../Logo'
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Container, Logo } from "../index";
 
 function Footer() {
+  const authStatus = useSelector((state) => state.auth.status);
+  const links = authStatus
+    ? [["Home", "/"], ["All posts", "/all-posts"], ["Add post", "/add-post"]]
+    : [["Home", "/"], ["Login", "/login"], ["Sign up", "/signup"]];
+
   return (
-    <section className="relative overflow-hidden py-10 bg-gray-400 border border-t-2 border-t-black">
-            <div className="relative z-10 mx-auto max-w-7xl px-4">
-                <div className="-m-6 flex flex-wrap">
-                    <div className="w-full p-6 md:w-1/2 lg:w-5/12">
-                        <div className="flex h-full flex-col justify-between">
-                            <div className="mb-4 inline-flex items-center">
-                                <Logo width="100px" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-600">
-                                    &copy; Copyright 2023. All Rights Reserved by DevUI.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full p-6 md:w-1/2 lg:w-2/12">
-                        <div className="h-full">
-                            <h3 className="tracking-px mb-9  text-xs font-semibold uppercase text-gray-500">
-                                Company
-                            </h3>
-                            <ul>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Features
-                                    </Link>
-                                </li>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Pricing
-                                    </Link>
-                                </li>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Affiliate Program
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Press Kit
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="w-full p-6 md:w-1/2 lg:w-2/12">
-                        <div className="h-full">
-                            <h3 className="tracking-px mb-9  text-xs font-semibold uppercase text-gray-500">
-                                Support
-                            </h3>
-                            <ul>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Account
-                                    </Link>
-                                </li>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Help
-                                    </Link>
-                                </li>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Contact Us
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Customer Support
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className="w-full p-6 md:w-1/2 lg:w-3/12">
-                        <div className="h-full">
-                            <h3 className="tracking-px mb-9  text-xs font-semibold uppercase text-gray-500">
-                                Legals
-                            </h3>
-                            <ul>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Terms &amp; Conditions
-                                    </Link>
-                                </li>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Privacy Policy
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Licensing
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-  )
+    <footer className="bg-[#0b0b0e] pt-12 text-[#f4f1e9]">
+      <Container>
+        <div className="grid gap-9 md:grid-cols-[1.2fr_1fr]">
+          <p className="font-display text-[clamp(24px,2.6vw,36px)] font-extrabold leading-[1.02] tracking-[-0.045em]">
+            Stories, notes<br />&amp; ideas for people<br />who build things.
+          </p>
+          <div>
+            <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-[#8f8b80]">Explore</h3>
+            <ul className="space-y-2">
+              {links.map(([name, to]) => (
+                <li key={name}>
+                  <Link to={to} className="text-[14.5px] font-medium hover:text-accent">{name}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="mt-9 flex flex-wrap justify-between gap-2.5 border-t border-white/20 pt-3.5 text-[10.5px] font-semibold uppercase tracking-widest text-[#8f8b80]">
+          <span>&copy; {new Date().getFullYear()} Blogify</span>
+          <span>Built with React and Appwrite</span>
+        </div>
+        <div className="py-8">
+          <Logo className="h-auto w-[clamp(220px,30vw,400px)]" />
+        </div>
+      </Container>
+    </footer>
+  );
 }
 
-export default Footer
+export default Footer;
