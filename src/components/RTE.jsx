@@ -2,6 +2,7 @@ import React from 'react'
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { Controller } from 'react-hook-form';
+import { labelClass } from './Input';
 
 const modules = {
   toolbar: [
@@ -17,7 +18,7 @@ const modules = {
 export default function RTE({ name, control, label, defaultValue = "" }) {
   return (
     <div className='w-full'>
-      {label && <label className='inline-block mb-1 pl-1'>{label}</label>}
+      {label && <span className={labelClass}>{label}</span>}
 
       <Controller
         name={name || "content"}

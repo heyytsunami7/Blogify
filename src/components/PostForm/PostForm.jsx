@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button, RTE, Input, Select } from "../index";
 import appwriteService from "../../appwrite/config";
@@ -93,62 +93,79 @@ function PostForm({ post }) {
   }, [watch, setValue, post]);
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-      <div className="w-2/3 px-2">
-        {error && <p className="text-red-600 mb-4">{error}</p>}
-        <Input
-          label="Title :"
-          placeholder="Title"
-          className="mb-4"
-          {...register("title", { required: true })}
-        />
-        <Input
-          label="Slug :"
-          placeholder="Slug"
-          className="mb-4"
-          readOnly
-          {...register("slug", { required: true })}
-        />
-        <RTE
-          label="Content :"
-          name="content"
-          control={control}
-          defaultValue={getValues("content")}
-        />
+    <form onSubmit={handleSubmit(submit)} className="grid gap-10 py-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <div>
+        <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-wider text-mute">
+          <span className="text-accent">● </span>{post ? "Editing" : "New draft"}
+        </span>
+        {error && (
+          <p role="alert" className="mb-5 rounded-[10px] border-l-4 border-danger bg-bg2 px-4 py-3 text-sm font-medium">{error}</p>
+        )}
+        <div className="space-y-5">
+          <Input
+            label="Title"
+            placeholder="Untitled story"
+            {...register("title", { required: true })}
+          />
+          <Input
+            label="Slug (the post's address)"
+            placeholder="your-story-slug"
+            readOnly
+            className="text-mute"
+            {...register("slug", { required: true })}
+          />
+          <RTE
+            label="Content"
+            name="content"
+            control={control}
+            defaultValue={getValues("content")}
+          />
+        </div>
       </div>
-      <div className="w-1/3 px-2">
-        <Input
-          label="Featured Image :"
-          type="file"
-          className="mb-4"
-          accept="image/png, image/jpg, image/jpeg, image/gif"
-          {...register("image", { required: !post })}
-        />
-        {post && (
-          <div className="w-full mb-4">
+
+      <aside className="space-y-5 lg:pt-8">
+        <div className="space-y-3 border-t border-fg pt-4">
+          <Input
+            label="Cover image"
+            type="file"
+            accept="image/png, image/jpg, image/jpeg, image/gif"
+            {...register("image", { required: !post })}
+          />
+          {post && (
             <img
               src={appwriteService.getFileView(post.featuredImage)}
               alt={post.title}
-              className="rounded-lg"
+              className="w-full rounded-[18px]"
             />
-          </div>
-        )}
-        <Input
-          label="Tags (comma separated, max 5) :"
-          placeholder="react, appwrite"
-          className="mb-4"
-          {...register("tags")}
-        />
-        <Select
-          options={["published", "draft"]}
-          label="Status"
-          className="mb-4"
-          {...register("status", { required: true })}
-        />
-        <Button type="submit" className="w-full">
-  {post ? "Update" : "Submit"}
-</Button>
-      </div>
+          )}
+        </div>
+        <div className="border-t border-fg pt-4">
+          <Input
+            label="Tags (comma separated, max 5)"
+            placeholder="react, appwrite"
+            {...register("tags")}
+          />
+        </div>
+        <div className="border-t border-fg pt-4">
+          <Select
+            options={["published", "draft"]}
+            label="Status"
+            {...register("status", { required: true })}
+          />
+          <p className="mt-2 text-sm text-mute">Drafts are visible only to you.</p>
+        </div>
+        <div className="flex items-center gap-4 border-t border-fg pt-4">
+          <Button type="submit" className="flex-1">
+            {post ? "Update post" : "Publish post"} <span aria-hidden="true">→</span>
+          </Button>
+          <Link
+            to={post ? `/post/${post.$id}` : "/all-posts"}
+            className="border-b border-current pb-0.5 text-xs font-semibold uppercase tracking-wider hover:text-accent"
+          >
+            Cancel
+          </Link>
+        </div>
+      </aside>
     </form>
   );
 }
