@@ -1,9 +1,9 @@
 const required = {
-    appwriteUrl: "VITE_APPWRITE_URL",
-    appwriteProjectId: "VITE_APPWRITE_PROJECT_ID",
-    appwriteDatabaseId: "VITE_APPWRITE_DATABASE_ID",
-    appwriteCollectionId: "VITE_APPWRITE_COLLECTION_ID",
-    appwriteBucketId: "VITE_APPWRITE_BUCKET_ID",
+    appwriteUrl: "PUBLIC_APPWRITE_URL",
+    appwriteProjectId: "PUBLIC_APPWRITE_PROJECT_ID",
+    appwriteDatabaseId: "PUBLIC_APPWRITE_DATABASE_ID",
+    appwriteCollectionId: "PUBLIC_APPWRITE_COLLECTION_ID",
+    appwriteBucketId: "PUBLIC_APPWRITE_BUCKET_ID",
 };
 
 const envSetup = {};
