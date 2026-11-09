@@ -21,7 +21,7 @@ function PostForm({ post }) {
         title: post?.title || "",
         slug: post?.$id || "",
         content: post?.content || "",
-        status: post?.status || "active",
+        status: post?.status || "published",
       },
     });
 
@@ -111,7 +111,7 @@ function PostForm({ post }) {
           </div>
         )}
         <Select
-          options={["active", "inactive"]}
+          options={["published", "draft"]}
           label="Status"
           className="mb-4"
           {...register("status", { required: true })}

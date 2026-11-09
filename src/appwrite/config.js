@@ -1,11 +1,11 @@
 import envSetup from "../config/envsetup";
 import { Client, ID, Databases, Storage, Query, Permission, Role } from "appwrite";
 
-// Anyone reads an active post; a draft is readable only by its author.
+// Anyone reads a published post; a draft is readable only by its author.
 const postPermissions = (userId, status) => {
     const author = Role.user(userId);
     return [
-        status === "active" ? Permission.read(Role.any()) : Permission.read(author),
+        status === "published" ? Permission.read(Role.any()) : Permission.read(author),
         Permission.update(author),
         Permission.delete(author),
     ];
@@ -79,7 +79,7 @@ export class Service {
         }
     }
 
-    async getPosts(queries = [Query.equal("status", "active")]) {
+    async getPosts(queries = [Query.equal("status", "published")]) {
         try {
             return await this.databases.listDocuments(
                 envSetup.appwriteDatabaseId,

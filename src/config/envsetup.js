@@ -16,4 +16,4 @@ for (const [key, name] of Object.entries(required)) {
     envSetup[key] = value;
 }
 
-export default envSetup;d
+export default envSetup;
