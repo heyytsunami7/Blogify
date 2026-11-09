@@ -58,6 +58,18 @@ export default function Post() {
                 </div>
                 <div className="w-full mb-6">
                     <h1 className="text-2xl font-bold">{post.title}</h1>
+                    {post.tags?.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                            {post.tags.map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="px-2 py-0.5 text-sm rounded-full bg-gray-200"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
                 <div className="browser-css">
                     {parse(DOMPurify.sanitize(post.content))}
