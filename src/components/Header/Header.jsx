@@ -29,7 +29,7 @@ function Header() {
             <Logo className="h-8 w-auto md:h-10" />
           </Link>
           <ul className="order-3 flex w-full gap-5 md:order-none md:w-auto md:gap-6">
-            {navItems.map((item, i) => (
+                        {navItems.map((item) => (
               <li key={item.name}>
                 <NavLink
                   to={item.slug}
@@ -38,7 +38,6 @@ function Header() {
                     `border-b-[2.5px] py-1 text-sm font-semibold ${isActive ? "border-accent" : "border-transparent hover:border-accent"}`
                   }
                 >
-                  <sup className="mr-1 text-[9.5px] text-mute">({String(i + 1).padStart(2, "0")})</sup>
                   {item.name}
                 </NavLink>
               </li>

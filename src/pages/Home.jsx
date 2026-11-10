@@ -14,10 +14,9 @@ import { excerpt, formatDate, readMinutes } from "../utils/post";
 
 const labelCls = "text-[11px] font-semibold uppercase tracking-wider";
 
-function SectionHead({ n, title, right }) {
+function SectionHead({ title, right }) {
   return (
-    <div className="grid grid-cols-[44px_1fr_auto] items-end gap-3.5 border-b-2 border-fg pb-3.5 sm:grid-cols-[56px_1fr_auto]">
-      <span className={`${labelCls} pb-2 text-accent`}>({n})</span>
+    <div className="flex items-end justify-between gap-3.5 border-b-2 border-fg pb-3.5">
       <h2 className="font-display text-[clamp(32px,4.4vw,60px)] font-extrabold leading-[0.95] tracking-[-0.05em]">
         {title}
       </h2>
