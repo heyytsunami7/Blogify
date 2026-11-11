@@ -19,13 +19,17 @@ function EditPost() {
     }
   }, [slug, navigate]);
 
-  return post ? (
+    return post ? (
     <div>
       <Container>
         <PostForm post={post} />
       </Container>
     </div>
-  ) : null;
+  ) : (
+    <Container>
+      <p className="py-16">Loading...</p>
+    </Container>
+  );
 }
 
 export default EditPost;
