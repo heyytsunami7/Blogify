@@ -13,6 +13,25 @@ import {
 import { excerpt, formatDate, readMinutes } from "../utils/post";
 
 const labelCls = "text-[11px] font-semibold uppercase tracking-wider";
+const pillCls =
+  "inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-line bg-card/80 px-4 py-2 text-sm font-semibold text-fg shadow-sm backdrop-blur transition hover:border-fg hover:bg-fg hover:text-bg";
+
+function Chevron({ up }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className={`size-4 ${up ? "rotate-180" : ""}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
 
 function SectionHead({ title, right }) {
   return (
@@ -186,7 +205,7 @@ function Home() {
 
       <Container>
         <section className="pt-[clamp(48px,5.5vw,80px)]">
-          <SectionHead n="01" title="Overview" right="At a glance" />
+          <SectionHead title="Overview" right="At a glance" />
           <div className="mt-5 grid gap-3 lg:grid-cols-12">
             <Link
               to={`/post/${featured.$id}`}
@@ -223,7 +242,7 @@ function Home() {
 
             <div className="flex flex-col gap-2.5 rounded-3xl bg-mint px-5 py-[18px] text-ink lg:col-span-5">
               <span className={`${labelCls} opacity-60`}>
-                (A) Stories per month
+                Stories per month
               </span>
               <div className="font-display text-[clamp(44px,4.6vw,64px)] font-extrabold leading-[0.95] tracking-[-0.06em]">
                 {posts.length}
@@ -235,7 +254,7 @@ function Home() {
             </div>
 
             <div className="flex flex-col justify-between gap-3 rounded-3xl bg-accent px-5 py-[18px] text-ink lg:col-span-5">
-              <span className={`${labelCls} opacity-60`}>(B) Promo</span>
+              <span className={`${labelCls} opacity-60`}>Promo</span>
               <h3 className="font-display text-[clamp(20px,1.9vw,26px)] font-extrabold leading-[1.05] tracking-[-0.04em]">
                 Write your first story in five minutes.
               </h3>
@@ -248,7 +267,7 @@ function Home() {
             </div>
 
             <div className="flex flex-col justify-between gap-3 rounded-3xl bg-yellow px-5 py-[18px] text-ink lg:col-span-5">
-              <span className={`${labelCls} opacity-60`}>(C) Community</span>
+              <span className={`${labelCls} opacity-60`}> Community</span>
               <h3 className="font-display text-[clamp(20px,1.9vw,26px)] font-extrabold leading-[1.05] tracking-[-0.04em]">
                 {writers} {writers === 1 ? "writer" : "writers"} and counting.
               </h3>
@@ -263,36 +282,50 @@ function Home() {
         </section>
 
         {rest.length > 0 && (
-          <section className="pt-[clamp(48px,5.5vw,80px)]">
+          <section
+            id="latest"
+            className="scroll-mt-20 pt-[clamp(48px,5.5vw,80px)]"
+          >
             <SectionHead
-              n="02"
               title="Latest stories"
               right={`Showing ${Math.min(shown, rest.length)} of ${rest.length}`}
             />
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {rest.slice(0, shown).map((post) => (
-                <PostCard key={post.$id} {...post} />
-              ))}
+            <div className="relative mt-5">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {rest.slice(0, shown).map((post) => (
+                  <PostCard key={post.$id} {...post} />
+                ))}
+              </div>
+              {shown < rest.length && (
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-44 items-end justify-center pb-1 backdrop-blur-[3px] [background:linear-gradient(to_top,var(--bg)_20%,transparent)] [mask-image:linear-gradient(to_top,#000_60%,transparent)]">
+                  <button
+                    onClick={() => setShown(shown + 3)}
+                    className={`${pillCls} pointer-events-auto`}
+                  >
+                    Show more <Chevron />
+                  </button>
+                </div>
+              )}
             </div>
-            {shown < rest.length && (
-              <button
-                onClick={() => setShown(shown + 3)}
-                className="mt-4 flex w-full cursor-pointer items-center justify-between rounded-3xl border-2 border-fg px-6 py-3.5 font-display text-[clamp(18px,1.9vw,26px)] font-extrabold tracking-[-0.04em] transition hover:border-accent hover:bg-accent hover:text-ink"
-              >
-                <span>
-                  Show more{" "}
-                  <small className="font-sans text-[0.55em] font-semibold opacity-70">
-                    (+{Math.min(3, rest.length - shown)})
-                  </small>
-                </span>
-                <span aria-hidden="true">↓</span>
-              </button>
+            {shown >= rest.length && shown > 6 && (
+              <div className="mt-6 flex justify-center">
+                <button
+                  onClick={() => {
+                    setShown(6);
+                    document
+                      .getElementById("latest")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className={pillCls}
+                >
+                  Show less <Chevron up />
+                </button>
+              </div>
             )}
           </section>
         )}
         <section className="pt-[clamp(48px,5.5vw,80px)]">
           <SectionHead
-            n="03"
             title="Readers say nice things."
             right="From the community"
           />
