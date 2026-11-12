@@ -14,10 +14,8 @@ function Header() {
     setDark(!dark);
   };
 
-  const navItems = [
+   const navItems = [
     { name: "Home", slug: "/", active: true },
-    { name: "Login", slug: "/login", active: !authStatus },
-    { name: "Signup", slug: "/signup", active: !authStatus },
     { name: "All Posts", slug: "/all-posts", active: authStatus },
   ].filter((item) => item.active);
 
@@ -60,7 +58,13 @@ function Header() {
               )}
             </svg>
           </button>
-          {authStatus && <LogoutBtn />}
+                    {authStatus ? (
+            <LogoutBtn />
+          ) : (
+            <Link to="/login" className="text-sm font-semibold transition hover:text-accent">
+              Log in
+            </Link>
+          )}
           <Button to={authStatus ? "/add-post" : "/signup"} size="sm">
             {authStatus ? "Add Post" : "Get started"} <span aria-hidden="true">↗</span>
           </Button>
