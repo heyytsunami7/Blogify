@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Button, RTE, Input, Select } from "../index";
 import appwriteService from "../../appwrite/config";
-
+import { fieldClass, labelClass } from "../Input";
 // Slug is the Appwrite document ID: a-z 0-9 - _ ., max 36 chars, no leading special char.
 const slugTransform = (value) =>
   value
@@ -14,14 +14,15 @@ const slugTransform = (value) =>
     .replace(/^-+|-+$/g, "");
 
 // "React, appwrite ,react" -> ["react", "appwrite"]; max 5 tags of 30 chars (matches the column size).
-const parseTags = (value) => [
-  ...new Set(
-    value
-      .split(",")
-      .map((tag) => tag.trim().toLowerCase().slice(0, 30))
-      .filter(Boolean)
-  ),
-].slice(0, 5);
+const parseTags = (value) =>
+  [
+    ...new Set(
+      value
+        .split(",")
+        .map((tag) => tag.trim().toLowerCase().slice(0, 30))
+        .filter(Boolean),
+    ),
+  ].slice(0, 5);
 
 function PostForm({ post }) {
   const navigate = useNavigate();
@@ -34,6 +35,7 @@ function PostForm({ post }) {
         content: post?.content || "",
         status: post?.status || "published",
         tags: post?.tags?.join(", ") || "",
+        summary: post?.summary || "",
       },
     });
 
@@ -63,6 +65,7 @@ function PostForm({ post }) {
           ...data,
           tags,
           featuredImage: file.$id,
+          authorName: userData.name,
           userId: userData.$id,
         });
 
@@ -76,7 +79,7 @@ function PostForm({ post }) {
       setError(
         post
           ? "Could not save your changes."
-          : "Could not create the post. A post with this title may already exist."
+          : "Could not create the post. A post with this title may already exist.",
       );
     }
   };
@@ -86,20 +89,31 @@ function PostForm({ post }) {
     if (post) return;
     const subscription = watch((value, { name }) => {
       if (name === "title") {
-        setValue("slug", slugTransform(value.title || ""), { shouldValidate: true });
+        setValue("slug", slugTransform(value.title || ""), {
+          shouldValidate: true,
+        });
       }
     });
     return () => subscription.unsubscribe();
   }, [watch, setValue, post]);
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="grid gap-10 py-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+    <form
+      onSubmit={handleSubmit(submit)}
+      className="grid gap-10 py-8 lg:grid-cols-[minmax(0,1fr)_320px]"
+    >
       <div>
         <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-wider text-mute">
-          <span className="text-accent">● </span>{post ? "Editing" : "New draft"}
+          <span className="text-accent">● </span>
+          {post ? "Editing" : "New draft"}
         </span>
         {error && (
-          <p role="alert" className="mb-5 rounded-[10px] border-l-4 border-danger bg-bg2 px-4 py-3 text-sm font-medium">{error}</p>
+          <p
+            role="alert"
+            className="mb-5 rounded-[10px] border-l-4 border-danger bg-bg2 px-4 py-3 text-sm font-medium"
+          >
+            {error}
+          </p>
         )}
         <div className="space-y-5">
           <Input
@@ -114,6 +128,19 @@ function PostForm({ post }) {
             className="text-mute"
             {...register("slug", { required: true })}
           />
+          <div>
+            <label className={labelClass} htmlFor="summary">
+              Summary (optional, shown on cards)
+            </label>
+            <textarea
+              id="summary"
+              rows={2}
+              maxLength={160}
+              placeholder="One or two sentences that make people click."
+              className={fieldClass}
+              {...register("summary")}
+            />
+          </div>
           <RTE
             label="Content"
             name="content"
@@ -152,11 +179,14 @@ function PostForm({ post }) {
             label="Status"
             {...register("status", { required: true })}
           />
-          <p className="mt-2 text-sm text-mute">Drafts are visible only to you.</p>
+          <p className="mt-2 text-sm text-mute">
+            Drafts are visible only to you.
+          </p>
         </div>
         <div className="flex items-center gap-4 border-t border-fg pt-4">
           <Button type="submit" className="flex-1">
-            {post ? "Update post" : "Publish post"} <span aria-hidden="true">→</span>
+            {post ? "Update post" : "Publish post"}{" "}
+            <span aria-hidden="true">→</span>
           </Button>
           <Link
             to={post ? `/post/${post.$id}` : "/all-posts"}
