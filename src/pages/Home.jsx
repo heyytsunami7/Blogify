@@ -8,7 +8,7 @@ import {
   Container,
   PostCard,
   Reviews,
-  StoriesChart,
+  StoriesChart, PostSkeleton
 } from "../components";
 import { excerpt, formatDate, readMinutes } from "../utils/post";
 
