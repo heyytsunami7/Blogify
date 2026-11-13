@@ -2,7 +2,17 @@ import { Link } from "react-router-dom";
 import appwriteService from "../appwrite/config";
 import { excerpt, formatDate, readMinutes } from "../utils/post";
 
-function PostCard({ $id, title, featuredImage, content, tags, status, $createdAt }) {
+function PostCard({
+  $id,
+  title,
+  featuredImage,
+  content,
+  summary,
+  authorName,
+  tags,
+  status,
+  $createdAt,
+}) {
   return (
     <Link
       to={`/post/${$id}`}
@@ -29,9 +39,12 @@ function PostCard({ $id, title, featuredImage, content, tags, status, $createdAt
         <h3 className="font-display text-[clamp(18px,1.6vw,22px)] font-extrabold leading-[1.08] tracking-[-0.035em] transition-colors group-hover:text-accent">
           {title}
         </h3>
-        <p className="mt-2 line-clamp-2 text-sm leading-snug text-fg2">{excerpt(content)}</p>
+        <p className="mt-2 line-clamp-2 text-sm leading-snug text-fg2">
+          {summary || excerpt(content)}
+        </p>
       </div>
       <div className="mt-3 border-t border-line px-1.5 pt-2.5 text-xs font-semibold text-mute">
+        {authorName ? `${authorName} · ` : ""}
         {formatDate($createdAt)} · {readMinutes(content)} min read
       </div>
     </Link>

@@ -226,10 +226,11 @@ function Home() {
                   {featured.title}
                 </h3>
                 <p className="max-w-[520px] text-[15px] leading-normal text-[#cfccc0]">
-                  {excerpt(featured.content, 150)}
+                  {featured.summary || excerpt(featured.content, 150)}
                 </p>
                 <div className="mt-auto flex items-center justify-between border-t border-white/20 pt-3.5 text-xs font-semibold text-[#a9a69b]">
                   <span>
+                    {featured.authorName ? `${featured.authorName} · ` : ""}
                     {formatDate(featured.$createdAt)} ·{" "}
                     {readMinutes(featured.content)} min read
                   </span>
