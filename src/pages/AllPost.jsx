@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Query } from "appwrite";
-import { Container, PostCard } from "../components/index";
-import { fieldClass } from "../components/Input";
+import { Container, PostCard , PostSkeleton} from "../components/index";
+import { fieldClass  } from "../components/Input";
 import appwriteService from "../appwrite/config";
 
 const chipCls =
