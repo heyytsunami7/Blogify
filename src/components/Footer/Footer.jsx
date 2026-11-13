@@ -5,22 +5,42 @@ import { Container, Logo } from "../index";
 function Footer() {
   const authStatus = useSelector((state) => state.auth.status);
   const links = authStatus
-    ? [["Home", "/"], ["All posts", "/all-posts"], ["Add post", "/add-post"]]
-    : [["Home", "/"], ["Login", "/login"], ["Sign up", "/signup"]];
+    ? [
+        ["Home", "/"],
+        ["Stories", "/stories"],
+        ["Add post", "/add-post"],
+      ]
+    : [
+        ["Home", "/"],
+        ["Stories", "/stories"],
+        ["Login", "/login"],
+        ["Sign up", "/signup"],
+      ];
 
   return (
     <footer className="bg-[#0b0b0e] pt-12 text-[#f4f1e9]">
       <Container>
         <div className="grid gap-9 md:grid-cols-[1.2fr_1fr]">
           <p className="font-display text-[clamp(24px,2.6vw,36px)] font-extrabold leading-[1.02] tracking-[-0.045em]">
-            Stories, notes<br />&amp; ideas for people<br />who build things.
+            Stories, notes
+            <br />
+            &amp; ideas for people
+            <br />
+            who build things.
           </p>
           <div>
-            <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-[#8f8b80]">Explore</h3>
+            <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-[#8f8b80]">
+              Explore
+            </h3>
             <ul className="space-y-2">
               {links.map(([name, to]) => (
                 <li key={name}>
-                  <Link to={to} className="text-[14.5px] font-medium hover:text-accent">{name}</Link>
+                  <Link
+                    to={to}
+                    className="text-[14.5px] font-medium hover:text-accent"
+                  >
+                    {name}
+                  </Link>
                 </li>
               ))}
             </ul>

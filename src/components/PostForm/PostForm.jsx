@@ -189,7 +189,7 @@ function PostForm({ post }) {
             <span aria-hidden="true">→</span>
           </Button>
           <Link
-            to={post ? `/post/${post.$id}` : "/all-posts"}
+            to={post ? `/post/${post.$id}` : "/stories"}
             className="border-b border-current pb-0.5 text-xs font-semibold uppercase tracking-wider hover:text-accent"
           >
             Cancel

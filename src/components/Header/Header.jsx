@@ -5,18 +5,25 @@ import { Button, Container, Logo, LogoutBtn } from "../index";
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
-  const [dark, setDark] = useState(document.documentElement.dataset.theme === "dark");
+  const [dark, setDark] = useState(
+    document.documentElement.dataset.theme === "dark",
+  );
 
   const toggleTheme = () => {
     const next = dark ? "light" : "dark";
     document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("blogify-theme", next); } catch { /* storage blocked */ }
+    try {
+      localStorage.setItem("blogify-theme", next);
+    } catch {
+      /* storage blocked */
+    }
     setDark(!dark);
   };
 
-   const navItems = [
+  const navItems = [
     { name: "Home", slug: "/", active: true },
     { name: "All Posts", slug: "/all-posts", active: authStatus },
+    { name: "Stories", slug: "/stories", active: true },
   ].filter((item) => item.active);
 
   return (
@@ -27,7 +34,7 @@ function Header() {
             <Logo className="h-8 w-auto md:h-10" />
           </Link>
           <ul className="order-3 flex w-full gap-5 md:order-none md:w-auto md:gap-6">
-                        {navItems.map((item) => (
+            {navItems.map((item) => (
               <li key={item.name}>
                 <NavLink
                   to={item.slug}
@@ -47,7 +54,15 @@ function Header() {
             aria-pressed={dark}
             className="grid size-[34px] cursor-pointer place-items-center rounded-[10px] border-[1.5px] border-fg text-fg transition hover:bg-fg hover:text-bg"
           >
-            <svg viewBox="0 0 24 24" className="size-[17px]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              viewBox="0 0 24 24"
+              className="size-[17px]"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               {dark ? (
                 <>
                   <circle cx="12" cy="12" r="4" />
@@ -58,15 +73,19 @@ function Header() {
               )}
             </svg>
           </button>
-                    {authStatus ? (
+          {authStatus ? (
             <LogoutBtn />
           ) : (
-            <Link to="/login" className="text-sm font-semibold transition hover:text-accent">
+            <Link
+              to="/login"
+              className="text-sm font-semibold transition hover:text-accent"
+            >
               Log in
             </Link>
           )}
           <Button to={authStatus ? "/add-post" : "/signup"} size="sm">
-            {authStatus ? "Add Post" : "Get started"} <span aria-hidden="true">↗</span>
+            {authStatus ? "Add Post" : "Get started"}{" "}
+            <span aria-hidden="true">↗</span>
           </Button>
         </nav>
       </Container>

@@ -179,10 +179,10 @@ function Home() {
                   {startLabel} <span aria-hidden="true">↗</span>
                 </Button>
                 <Link
-                  to="/all-posts"
+                  to="/stories"
                   className="border-b-[1.5px] border-current pb-0.5 text-sm font-semibold hover:text-accent"
                 >
-                  Browse all posts
+                  Browse stories
                 </Link>
               </div>
               <dl className="mt-8 grid max-w-[540px] grid-cols-3 border-t-2 border-fg">
