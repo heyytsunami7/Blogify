@@ -40,12 +40,8 @@ function AllPost() {
     });
   };
 
-  if (posts === null) {
-    return (
-      <Container>
-        <p className="py-16">Loading...</p>
-      </Container>
-    );
+   if (posts === null) {
+    return <Container><div className="py-11"><PostSkeleton /></div></Container>;
   }
 
   // shortcut: filters run in the browser over the 100 newest posts; use Appwrite queries beyond that.

@@ -123,12 +123,8 @@ function Home() {
       .then((res) => setPosts(res ? res.documents : []));
   }, []);
 
-  if (posts === null) {
-    return (
-      <Container>
-        <p className="py-16">Loading...</p>
-      </Container>
-    );
+   if (posts === null) {
+    return <Container><div className="py-11"><PostSkeleton /></div></Container>;
   }
 
   if (posts.length === 0) {

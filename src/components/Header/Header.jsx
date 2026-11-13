@@ -48,7 +48,22 @@ function Header() {
               </li>
             ))}
           </ul>
-          <button
+      
+          {authStatus ? (
+            <LogoutBtn />
+          ) : (
+            <Link
+              to="/login"
+              className="text-sm font-semibold transition hover:text-accent"
+            >
+              Log in
+            </Link>
+          )}
+          <Button to={authStatus ? "/add-post" : "/signup"} size="sm">
+            {authStatus ? "Add Post" : "Get started"}{" "}
+            <span aria-hidden="true">↗</span>
+          </Button>
+              <button
             onClick={toggleTheme}
             aria-label="Toggle dark mode"
             aria-pressed={dark}
@@ -73,20 +88,6 @@ function Header() {
               )}
             </svg>
           </button>
-          {authStatus ? (
-            <LogoutBtn />
-          ) : (
-            <Link
-              to="/login"
-              className="text-sm font-semibold transition hover:text-accent"
-            >
-              Log in
-            </Link>
-          )}
-          <Button to={authStatus ? "/add-post" : "/signup"} size="sm">
-            {authStatus ? "Add Post" : "Get started"}{" "}
-            <span aria-hidden="true">↗</span>
-          </Button>
         </nav>
       </Container>
     </header>

@@ -21,6 +21,8 @@ import NotFound from "../pages/NotFound.jsx"
 import StoriesChart from "./StoriesChart.jsx"
 import AuthShell from "./AuthShell.jsx"
 import Reviews from "./Reviews.jsx"
+import PostSkeleton from "./PostSkeleton.jsx"
+
 export {
    Header,
    Footer,
@@ -44,5 +46,6 @@ export {
    Post,
    NotFound,
    StoriesChart,
-   Reviews
+   Reviews,
+   PostSkeleton
 }
