@@ -154,6 +154,58 @@ export class Service {
     }
   }
 
+      // One row per vote: anyone can read it, only the voter can delete it.
+    async getVotes(postId, userId) {
+        try {
+            const count = await this.databases.listDocuments(
+                envSetup.appwriteDatabaseId,
+                envSetup.appwriteUpvotesCollectionId,
+                [Query.equal("postId", postId), Query.limit(1)]
+            );
+            let mine = null;
+            if (userId) {
+                const own = await this.databases.listDocuments(
+                    envSetup.appwriteDatabaseId,
+                    envSetup.appwriteUpvotesCollectionId,
+                    [Query.equal("postId", postId), Query.equal("userId", userId), Query.limit(1)]
+                );
+                mine = own.documents[0]?.$id || null;
+            }
+            return { total: count.total, mine };
+        } catch (error) {
+            console.error("Appwrite service :: getVotes :: error", error);
+            return { total: 0, mine: null };
+        }
+    }
+
+    async addVote(postId, userId) {
+        try {
+            return await this.databases.createDocument(
+                envSetup.appwriteDatabaseId,
+                envSetup.appwriteUpvotesCollectionId,
+                ID.unique(),
+                { postId, userId },
+                [Permission.read(Role.any()), Permission.delete(Role.user(userId))]
+            );
+        } catch (error) {
+            console.error("Appwrite service :: addVote :: error", error);
+            return false;
+        }
+    }
+
+    async removeVote(voteId) {
+        try {
+            await this.databases.deleteDocument(
+                envSetup.appwriteDatabaseId,
+                envSetup.appwriteUpvotesCollectionId,
+                voteId
+            );
+            return true;
+        } catch (error) {
+            console.error("Appwrite service :: removeVote :: error", error);
+            return false;
+        }
+    }
   // getFilePreview needs image transformations, which the Free plan blocks.
   getFileView(fileId) {
     return this.bucket.getFileView(envSetup.appwriteBucketId, fileId);
