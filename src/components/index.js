@@ -22,7 +22,7 @@ import StoriesChart from "./StoriesChart.jsx"
 import AuthShell from "./AuthShell.jsx"
 import Reviews from "./Reviews.jsx"
 import PostSkeleton from "./PostSkeleton.jsx"
-
+import UpvoteButton from "./UpvoteButton.jsx"
 export {
    Header,
    Footer,
@@ -47,5 +47,6 @@ export {
    NotFound,
    StoriesChart,
    Reviews,
-   PostSkeleton
+   PostSkeleton,
+   UpvoteButton
 }

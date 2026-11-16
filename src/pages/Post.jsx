@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Button, Container } from "../components";
+import { Button, Container, UpvoteButton } from "../components";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 import { useSelector } from "react-redux";
@@ -94,6 +94,9 @@ export default function Post() {
         </figure>
         <div className="browser-css mx-auto max-w-[700px]">
           {parse(DOMPurify.sanitize(post.content))}
+        </div>
+        <div className="mx-auto mt-10 max-w-[700px]">
+          <UpvoteButton postId={post.$id} />
         </div>
       </article>
     </Container>
