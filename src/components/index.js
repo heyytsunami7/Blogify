@@ -23,6 +23,8 @@ import AuthShell from "./AuthShell.jsx"
 import Reviews from "./Reviews.jsx"
 import PostSkeleton from "./PostSkeleton.jsx"
 import UpvoteButton from "./UpvoteButton.jsx"
+import Comments from "./Comments.jsx"
+
 export {
    Header,
    Footer,
@@ -48,5 +50,6 @@ export {
    StoriesChart,
    Reviews,
    PostSkeleton,
-   UpvoteButton
+   UpvoteButton,
+   Comments
 }

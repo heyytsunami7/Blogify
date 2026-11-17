@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Button, Container, UpvoteButton } from "../components";
+import { Button, Comments, Container, UpvoteButton } from "../components";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 import { useSelector } from "react-redux";
@@ -25,14 +25,13 @@ export default function Post() {
     } else navigate("/");
   }, [slug, navigate]);
 
-  const deletePost = () => {
+  const deletePost = async () => {
     if (!window.confirm("Delete this post? This cannot be undone.")) return;
-    appwriteService.deletePost(post.$id).then((status) => {
-      if (status) {
-        appwriteService.deleteFile(post.featuredImage);
-        navigate("/");
-      }
-    });
+    await appwriteService.deletePostComments(post.$id);
+    if (await appwriteService.deletePost(post.$id)) {
+      appwriteService.deleteFile(post.featuredImage);
+      navigate("/");  
+    }
   };
 
   return post ? (
@@ -97,6 +96,7 @@ export default function Post() {
         </div>
         <div className="mx-auto mt-10 max-w-[700px]">
           <UpvoteButton postId={post.$id} />
+          <Comments postId={post.$id} postAuthorId={post.userId} />
         </div>
       </article>
     </Container>
