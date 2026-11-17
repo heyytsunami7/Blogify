@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
-import { Button, Container, Logo, LogoutBtn } from "../index";
+import { Button, Container, Logo } from "../index";
+import UserMenu from "./UserMenu";
 
 function Header() {
   const authStatus = useSelector((state) => state.auth.status);
-  const [dark, setDark] = useState(
-    document.documentElement.dataset.theme === "dark",
-  );
+  const [dark, setDark] = useState(document.documentElement.dataset.theme === "dark");
 
   const toggleTheme = () => {
     const next = dark ? "light" : "dark";
@@ -21,10 +20,9 @@ function Header() {
   };
 
   const navItems = [
-    { name: "Home", slug: "/", active: true },
-    { name: "All Posts", slug: "/all-posts", active: authStatus },
-    { name: "Stories", slug: "/stories", active: true },
-  ].filter((item) => item.active);
+    { name: "Home", slug: "/" },
+    { name: "Stories", slug: "/stories" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 border-b-2 border-fg bg-bg">
@@ -48,36 +46,13 @@ function Header() {
               </li>
             ))}
           </ul>
-      
-          {authStatus ? (
-            <LogoutBtn />
-          ) : (
-            <Link
-              to="/login"
-              className="text-sm font-semibold transition hover:text-accent"
-            >
-              Log in
-            </Link>
-          )}
-          <Button to={authStatus ? "/add-post" : "/signup"} size="sm">
-            {authStatus ? "Add Post" : "Get started"}{" "}
-            <span aria-hidden="true">↗</span>
-          </Button>
-              <button
+          <button
             onClick={toggleTheme}
             aria-label="Toggle dark mode"
             aria-pressed={dark}
             className="grid size-[34px] cursor-pointer place-items-center rounded-[10px] border-[1.5px] border-fg text-fg transition hover:bg-fg hover:text-bg"
           >
-            <svg
-              viewBox="0 0 24 24"
-              className="size-[17px]"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
+            <svg viewBox="0 0 24 24" className="size-[17px]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               {dark ? (
                 <>
                   <circle cx="12" cy="12" r="4" />
@@ -88,6 +63,14 @@ function Header() {
               )}
             </svg>
           </button>
+          {authStatus ? (
+            <UserMenu />
+          ) : (
+            <>
+              <Link to="/login" className="text-sm font-semibold transition hover:text-accent">Log in</Link>
+              <Button to="/signup" size="sm">Get started <span aria-hidden="true">↗</span></Button>
+            </>
+          )}
         </nav>
       </Container>
     </header>
