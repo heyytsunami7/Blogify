@@ -97,7 +97,13 @@ export class Service {
       return false;
     }
   }
-
+  // Deletes the post's comments, the post and its cover image.
+  async removePost(post) {
+    await this.deletePostComments(post.$id);
+    if (!(await this.deletePost(post.$id))) return false;
+    this.deleteFile(post.featuredImage);
+    return true;
+  }
   async getPost(slug) {
     try {
       return await this.databases.getDocument(

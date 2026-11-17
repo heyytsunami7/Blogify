@@ -24,6 +24,7 @@ import Reviews from "./Reviews.jsx"
 import PostSkeleton from "./PostSkeleton.jsx"
 import UpvoteButton from "./UpvoteButton.jsx"
 import Comments from "./Comments.jsx"
+import MyPosts from "../pages/MyPosts.jsx"
 
 export {
    Header,
@@ -51,5 +52,6 @@ export {
    Reviews,
    PostSkeleton,
    UpvoteButton,
-   Comments
+   Comments,
+   MyPosts
 }

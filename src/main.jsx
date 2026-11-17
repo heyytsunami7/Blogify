@@ -80,6 +80,14 @@ const router = createBrowserRouter([
         path: "*",
         element: <NotFound />,
       },
+      {
+        path: "/my-posts",
+        element: (
+          <AuthLayout authentication>
+            <MyPosts />
+          </AuthLayout>
+        ),
+      },
     ],
   },
 ]);
