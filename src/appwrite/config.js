@@ -123,7 +123,64 @@ export class Service {
       return false;
     }
   }
+  // Flat comments: anyone reads, a logged-in user writes, and the comment's author
+  // and the post's author can delete it.
+  async createComment({ postId, postAuthorId, userId, authorName, body }) {
+    try {
+      const deleters = [...new Set([userId, postAuthorId])];
+      return await this.databases.createDocument(
+        envSetup.appwriteDatabaseId,
+        envSetup.appwriteCommentsCollectionId,
+        ID.unique(),
+        { postId, userId, authorName, body },
+        [
+          Permission.read(Role.any()),
+          ...deleters.map((id) => Permission.delete(Role.user(id))),
+        ],
+      );
+    } catch (error) {
+      console.error("Appwrite service :: createComment :: error", error);
+      return false;
+    }
+  }
 
+  async getComments(postId) {
+    try {
+      return await this.databases.listDocuments(
+        envSetup.appwriteDatabaseId,
+        envSetup.appwriteCommentsCollectionId,
+        [
+          Query.equal("postId", postId),
+          Query.orderDesc("$createdAt"),
+          Query.limit(100),
+        ],
+      );
+    } catch (error) {
+      console.error("Appwrite service :: getComments :: error", error);
+      return false;
+    }
+  }
+
+  async deleteComment(commentId) {
+    try {
+      await this.databases.deleteDocument(
+        envSetup.appwriteDatabaseId,
+        envSetup.appwriteCommentsCollectionId,
+        commentId,
+      );
+      return true;
+    } catch (error) {
+      console.error("Appwrite service :: deleteComment :: error", error);
+      return false;
+    }
+  }
+
+  // Called when a post is deleted. shortcut: the 100 newest comments, then the rest stay as orphans.
+  async deletePostComments(postId) {
+    const res = await this.getComments(postId);
+    if (res)
+      await Promise.all(res.documents.map((c) => this.deleteComment(c.$id)));
+  }
   // Images are public to read; only the uploader can change or delete them.
   async uploadFile(file, userId) {
     try {
@@ -154,58 +211,62 @@ export class Service {
     }
   }
 
-      // One row per vote: anyone can read it, only the voter can delete it.
-    async getVotes(postId, userId) {
-        try {
-            const count = await this.databases.listDocuments(
-                envSetup.appwriteDatabaseId,
-                envSetup.appwriteUpvotesCollectionId,
-                [Query.equal("postId", postId), Query.limit(1)]
-            );
-            let mine = null;
-            if (userId) {
-                const own = await this.databases.listDocuments(
-                    envSetup.appwriteDatabaseId,
-                    envSetup.appwriteUpvotesCollectionId,
-                    [Query.equal("postId", postId), Query.equal("userId", userId), Query.limit(1)]
-                );
-                mine = own.documents[0]?.$id || null;
-            }
-            return { total: count.total, mine };
-        } catch (error) {
-            console.error("Appwrite service :: getVotes :: error", error);
-            return { total: 0, mine: null };
-        }
+  // One row per vote: anyone can read it, only the voter can delete it.
+  async getVotes(postId, userId) {
+    try {
+      const count = await this.databases.listDocuments(
+        envSetup.appwriteDatabaseId,
+        envSetup.appwriteUpvotesCollectionId,
+        [Query.equal("postId", postId), Query.limit(1)],
+      );
+      let mine = null;
+      if (userId) {
+        const own = await this.databases.listDocuments(
+          envSetup.appwriteDatabaseId,
+          envSetup.appwriteUpvotesCollectionId,
+          [
+            Query.equal("postId", postId),
+            Query.equal("userId", userId),
+            Query.limit(1),
+          ],
+        );
+        mine = own.documents[0]?.$id || null;
+      }
+      return { total: count.total, mine };
+    } catch (error) {
+      console.error("Appwrite service :: getVotes :: error", error);
+      return { total: 0, mine: null };
     }
+  }
 
-    async addVote(postId, userId) {
-        try {
-            return await this.databases.createDocument(
-                envSetup.appwriteDatabaseId,
-                envSetup.appwriteUpvotesCollectionId,
-                ID.unique(),
-                { postId, userId },
-                [Permission.read(Role.any()), Permission.delete(Role.user(userId))]
-            );
-        } catch (error) {
-            console.error("Appwrite service :: addVote :: error", error);
-            return false;
-        }
+  async addVote(postId, userId) {
+    try {
+      return await this.databases.createDocument(
+        envSetup.appwriteDatabaseId,
+        envSetup.appwriteUpvotesCollectionId,
+        ID.unique(),
+        { postId, userId },
+        [Permission.read(Role.any()), Permission.delete(Role.user(userId))],
+      );
+    } catch (error) {
+      console.error("Appwrite service :: addVote :: error", error);
+      return false;
     }
+  }
 
-    async removeVote(voteId) {
-        try {
-            await this.databases.deleteDocument(
-                envSetup.appwriteDatabaseId,
-                envSetup.appwriteUpvotesCollectionId,
-                voteId
-            );
-            return true;
-        } catch (error) {
-            console.error("Appwrite service :: removeVote :: error", error);
-            return false;
-        }
+  async removeVote(voteId) {
+    try {
+      await this.databases.deleteDocument(
+        envSetup.appwriteDatabaseId,
+        envSetup.appwriteUpvotesCollectionId,
+        voteId,
+      );
+      return true;
+    } catch (error) {
+      console.error("Appwrite service :: removeVote :: error", error);
+      return false;
     }
+  }
   // getFilePreview needs image transformations, which the Free plan blocks.
   getFileView(fileId) {
     return this.bucket.getFileView(envSetup.appwriteBucketId, fileId);

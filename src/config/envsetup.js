@@ -5,6 +5,7 @@ const required = {
   appwriteCollectionId: "BLOGIFY_APPWRITE_COLLECTION_ID",
   appwriteBucketId: "BLOGIFY_APPWRITE_BUCKET_ID",
   appwriteUpvotesCollectionId: "BLOGIFY_APPWRITE_UPVOTES_COLLECTION_ID",
+  appwriteCommentsCollectionId: "BLOGIFY_APPWRITE_COMMENTS_COLLECTION_ID"
 };
 
 const envSetup = {};
