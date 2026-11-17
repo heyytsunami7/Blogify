@@ -19,6 +19,7 @@ import {
   Post,
   Home,
   NotFound,
+  MyPosts
 } from "./components/index.js";
 
 const router = createBrowserRouter([

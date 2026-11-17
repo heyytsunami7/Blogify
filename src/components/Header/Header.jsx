@@ -46,6 +46,15 @@ function Header() {
               </li>
             ))}
           </ul>
+          
+          {authStatus ? (
+            <UserMenu />
+          ) : (
+            <>
+              <Link to="/login" className="text-sm font-semibold transition hover:text-accent">Log in</Link>
+              <Button to="/signup" size="sm">Get started <span aria-hidden="true">↗</span></Button>
+            </>
+          )}
           <button
             onClick={toggleTheme}
             aria-label="Toggle dark mode"
@@ -63,15 +72,8 @@ function Header() {
               )}
             </svg>
           </button>
-          {authStatus ? (
-            <UserMenu />
-          ) : (
-            <>
-              <Link to="/login" className="text-sm font-semibold transition hover:text-accent">Log in</Link>
-              <Button to="/signup" size="sm">Get started <span aria-hidden="true">↗</span></Button>
-            </>
-          )}
         </nav>
+        
       </Container>
     </header>
   );
