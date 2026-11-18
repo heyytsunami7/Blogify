@@ -24,17 +24,29 @@ function App() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const spin = () =>
-      document.documentElement.style.setProperty("--star-rot", `${window.scrollY * 0.45}deg`);
+      document.documentElement.style.setProperty(
+        "--star-rot",
+        `${window.scrollY * 0.45}deg`,
+      );
     window.addEventListener("scroll", spin, { passive: true });
     return () => window.removeEventListener("scroll", spin);
   }, []);
 
   return !loading ? (
     <div className="flex min-h-screen flex-col">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-2 focus:z-[60] focus:rounded-[10px] focus:bg-fg focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-bg"
+      >
+        Skip to content
+      </a>
+
       <Header />
-      <main className="flex-1">
+
+      <main id="main" tabIndex={-1} className="flex-1 outline-none">
         <Outlet />
       </main>
+
       <Footer />
     </div>
   ) : null;
