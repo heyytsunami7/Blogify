@@ -61,7 +61,17 @@ export default function Post() {
             {post.title}
           </h1>
           <p className="mt-5 border-y border-fg py-3 text-xs font-semibold uppercase tracking-wider text-mute">
-            {post.authorName ? `By ${post.authorName} · ` : ""}
+            {post.authorName && (
+  <>
+    <Link
+      to={`/author/${post.userId}`}
+      className="transition hover:text-accent"
+    >
+      By {post.authorName}
+    </Link>
+    {" · "}
+  </>
+)}
             {formatDate(post.$createdAt)} · {readMinutes(post.content)} min read
           </p>
           {isAuthor && (

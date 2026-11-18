@@ -19,7 +19,8 @@ import {
   Post,
   Home,
   NotFound,
-  MyPosts
+  MyPosts,
+  Profile
 } from "./components/index.js";
 
 const router = createBrowserRouter([
@@ -88,6 +89,10 @@ const router = createBrowserRouter([
             <MyPosts />
           </AuthLayout>
         ),
+      },
+      {
+        path: "/author/:userId",
+        element: <Profile />,
       },
     ],
   },
