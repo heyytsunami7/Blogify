@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import { Query } from "appwrite";
 import { Container, PostCard, PostSkeleton } from "../components";
 import appwriteService from "../appwrite/config";
+import useTitle from "../utils/useTitle";
 
 export default function Profile() {
   const { userId } = useParams();
   const [posts, setPosts] = useState(null);
+  useTitle(posts?.[0]?.authorName || "Profile");
 
   useEffect(() => {
     appwriteService

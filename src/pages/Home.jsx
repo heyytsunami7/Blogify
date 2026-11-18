@@ -11,6 +11,7 @@ import {
   StoriesChart, PostSkeleton
 } from "../components";
 import { excerpt, formatDate, readMinutes } from "../utils/post";
+import useTitle from "../utils/useTitle";
 
 const labelCls = "text-[11px] font-semibold uppercase tracking-wider";
 const pillCls =
@@ -107,6 +108,7 @@ function Mark() {
 }
 
 function Home() {
+  useTitle();
   const [posts, setPosts] = useState(null);
   const [shown, setShown] = useState(6);
   const authStatus = useSelector((state) => state.auth.status);

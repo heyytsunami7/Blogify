@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Query } from "appwrite";
 import { Button, Container, PostCard, PostSkeleton } from "../components";
 import appwriteService from "../appwrite/config";
+import useTitle from "../utils/useTitle";
 
 const TABS = [["all", "All"], ["published", "Published"], ["draft", "Drafts"]];
 
@@ -11,6 +12,7 @@ export default function MyPosts() {
   const [posts, setPosts] = useState(null);
   const [tab, setTab] = useState("all");
   const [error, setError] = useState("");
+  useTitle("My posts");
 
   useEffect(() => {
     appwriteService

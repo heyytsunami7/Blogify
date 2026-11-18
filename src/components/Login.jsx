@@ -5,12 +5,14 @@ import { AuthShell, Button, Input } from "./index";
 import { useDispatch } from "react-redux";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
+import useTitle from "../utils/useTitle";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [error, setError] = useState("");
+  useTitle("Log in");
 
   const login = async (data) => {
     setError("");

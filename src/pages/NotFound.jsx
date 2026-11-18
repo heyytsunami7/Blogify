@@ -1,6 +1,8 @@
 import { Button, Container } from "../components";
+import useTitle from "../utils/useTitle";
 
 function NotFound() {
+  useTitle("Page not found");
   return (
     <Container>
       <div className="py-24">

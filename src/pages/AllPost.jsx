@@ -4,11 +4,13 @@ import { Query } from "appwrite";
 import { Container, PostCard , PostSkeleton} from "../components/index";
 import { fieldClass  } from "../components/Input";
 import appwriteService from "../appwrite/config";
+import useTitle from "../utils/useTitle";
 
 const chipCls =
   "cursor-pointer rounded-full border px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider transition";
 
 function AllPost() {
+  useTitle("Stories");
   const [posts, setPosts] = useState(null);
   const [params, setParams] = useSearchParams();
   const q = params.get("q") || "";
