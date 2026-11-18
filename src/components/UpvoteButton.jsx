@@ -8,7 +8,7 @@ export default function UpvoteButton({ postId }) {
   const navigate = useNavigate();
   const [votes, setVotes] = useState(null); // { total, mine }
   const [busy, setBusy] = useState(false);
-
+    const [error, setError] = useState(false);
   useEffect(() => {
     appwriteService.getVotes(postId, userId).then(setVotes);
   }, [postId, userId]);
@@ -17,17 +17,21 @@ export default function UpvoteButton({ postId }) {
     if (!userId) return navigate("/login");
     if (busy || !votes) return;
     setBusy(true);
+    setError(false);
     if (votes.mine) {
       if (await appwriteService.removeVote(votes.mine)) setVotes({ total: votes.total - 1, mine: null });
+      else setError(true);
     } else {
       const vote = await appwriteService.addVote(postId, userId);
       if (vote) setVotes({ total: votes.total + 1, mine: vote.$id });
+      else setError(true);
     }
     setBusy(false);
   };
 
   const active = Boolean(votes?.mine);
   return (
+    <>
     <button
       onClick={toggle}
       aria-pressed={active}
@@ -42,5 +46,7 @@ export default function UpvoteButton({ postId }) {
       {votes ? votes.total : "–"}
       <span className="font-semibold">{active ? "Upvoted" : "Upvote"}</span>
     </button>
+    {error && <p role="alert" className="mt-2 text-xs text-danger">Could not save your vote. Try again.</p>}
+    </>
   );
 }

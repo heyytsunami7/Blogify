@@ -11,7 +11,7 @@ export default function Post() {
   const [post, setPost] = useState(null);
   const { slug } = useParams();
   const navigate = useNavigate();
-
+  const [error, setError] = useState("");
   const userData = useSelector((state) => state.auth.userData);
 
   const isAuthor = post && userData ? post.userId === userData.$id : false;
@@ -25,13 +25,11 @@ export default function Post() {
     } else navigate("/");
   }, [slug, navigate]);
 
-  const deletePost = async () => {
+    const deletePost = async () => {
     if (!window.confirm("Delete this post? This cannot be undone.")) return;
-    await appwriteService.deletePostComments(post.$id);
-    if (await appwriteService.deletePost(post.$id)) {
-      appwriteService.deleteFile(post.featuredImage);
-      navigate("/");  
-    }
+    setError("");
+    if (await appwriteService.removePost(post)) navigate("/");
+    else setError("Could not delete this post. Try again.");
   };
 
   return post ? (
@@ -90,6 +88,7 @@ export default function Post() {
                 <Button variant="danger" size="sm" onClick={deletePost}>
                   Delete
                 </Button>
+                              {error && <p role="alert" className="w-full text-sm text-danger">{error}</p>}
               </div>
             </div>
           )}
