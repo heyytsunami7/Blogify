@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="<your-vercel-url>">Live demo</a>
+  <a href="https://blogify-nine-swart.vercel.app/">Live demo</a>
 </p>
 
 <p align="center">

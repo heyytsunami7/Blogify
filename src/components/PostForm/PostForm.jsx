@@ -6,24 +6,6 @@ import { Button, RTE, Input, Select } from "../index";
 import appwriteService from "../../appwrite/config";
 import { fieldClass, labelClass } from "../Input";
 import { parseTags, slugTransform } from "../../utils/post";
-// Slug is the Appwrite document ID: a-z 0-9 - _ ., max 36 chars, no leading special char.
-const slugTransform = (value) =>
-  value
-    .toLowerCase()
-    .replace(/[^a-z\d]+/g, "-")
-    .slice(0, 36)
-    .replace(/^-+|-+$/g, "");
-
-// "React, appwrite ,react" -> ["react", "appwrite"]; max 5 tags of 30 chars (matches the column size).
-const parseTags = (value) =>
-  [
-    ...new Set(
-      value
-        .split(",")
-        .map((tag) => tag.trim().toLowerCase().slice(0, 30))
-        .filter(Boolean),
-    ),
-  ].slice(0, 5);
 
 function PostForm({ post }) {
   const navigate = useNavigate();
