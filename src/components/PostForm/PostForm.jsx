@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Button, RTE, Input, Select } from "../index";
 import appwriteService from "../../appwrite/config";
 import { fieldClass, labelClass } from "../Input";
+import { parseTags, slugTransform } from "../../utils/post";
 // Slug is the Appwrite document ID: a-z 0-9 - _ ., max 36 chars, no leading special char.
 const slugTransform = (value) =>
   value
