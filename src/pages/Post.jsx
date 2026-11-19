@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Button, Comments, Container, UpvoteButton } from "../components";
+import { Button, Comments, Container, NotFound, UpvoteButton } from "../components";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 import { useSelector } from "react-redux";
@@ -13,6 +13,7 @@ export default function Post() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const [missing, setMissing] = useState(false);
   useTitle(post?.title);
   const userData = useSelector((state) => state.auth.userData);
 
@@ -22,7 +23,7 @@ export default function Post() {
     if (slug) {
       appwriteService.getPost(slug).then((post) => {
         if (post) setPost(post);
-        else navigate("/");
+        else setMissing(true);
       });
     } else navigate("/");
   }, [slug, navigate]);
@@ -33,6 +34,8 @@ export default function Post() {
     if (await appwriteService.removePost(post)) navigate("/");
     else setError("Could not delete this post. Try again.");
   };
+
+  if (missing) return <NotFound />;
 
   return post ? (
     <Container>

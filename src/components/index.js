@@ -26,6 +26,7 @@ import UpvoteButton from "./UpvoteButton.jsx"
 import Comments from "./Comments.jsx"
 import MyPosts from "../pages/MyPosts.jsx"
 import Profile from "../pages/Profile.jsx"
+import LoadError from "./LoadError.jsx"
 export {
    Header,
    Footer,
@@ -54,5 +55,6 @@ export {
    UpvoteButton,
    Comments,
    MyPosts,
-   Profile
+   Profile,
+   LoadError
 }

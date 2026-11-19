@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Query } from "appwrite";
-import { Container, PostCard , PostSkeleton} from "../components/index";
+import { Container, PostCard , PostSkeleton, LoadError } from "../components/index";
 import { fieldClass  } from "../components/Input";
 import appwriteService from "../appwrite/config";
 import useTitle from "../utils/useTitle";
@@ -12,6 +12,7 @@ const chipCls =
 function AllPost() {
   useTitle("Stories");
   const [posts, setPosts] = useState(null);
+  const [failed, setFailed] = useState(false);
   const [params, setParams] = useSearchParams();
   const q = params.get("q") || "";
   const tag = params.get("tag") || "";
@@ -19,7 +20,7 @@ function AllPost() {
   useEffect(() => {
     appwriteService
       .getPosts([Query.orderDesc("$createdAt"), Query.limit(100)])
-      .then((res) => setPosts(res ? res.documents : []));
+      .then((res) => (res ? setPosts(res.documents) : setFailed(true)));
   }, []);
 
   // The 10 most used tags.
@@ -42,7 +43,9 @@ function AllPost() {
     });
   };
 
-   if (posts === null) {
+  if (failed) return <LoadError />;
+
+  if (posts === null) {
     return <Container><div className="py-11"><PostSkeleton /></div></Container>;
   }
 

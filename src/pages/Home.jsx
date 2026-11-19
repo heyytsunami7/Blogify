@@ -8,7 +8,7 @@ import {
   Container,
   PostCard,
   Reviews,
-  StoriesChart, PostSkeleton
+  StoriesChart, PostSkeleton, LoadError
 } from "../components";
 import { excerpt, formatDate, readMinutes } from "../utils/post";
 import useTitle from "../utils/useTitle";
@@ -109,6 +109,7 @@ function Mark() {
 
 function Home() {
   useTitle();
+  const [failed, setFailed] = useState(false);
   const [posts, setPosts] = useState(null);
   const [shown, setShown] = useState(6);
   const authStatus = useSelector((state) => state.auth.status);
@@ -122,10 +123,12 @@ function Home() {
         Query.orderDesc("$createdAt"),
         Query.limit(100),
       ])
-      .then((res) => setPosts(res ? res.documents : []));
+      .then((res) => (res ? setPosts(res.documents) : setFailed(true)));
   }, []);
 
-   if (posts === null) {
+  if (failed) return <LoadError />;
+
+  if (posts === null) {
     return <Container><div className="py-11"><PostSkeleton /></div></Container>;
   }
 
