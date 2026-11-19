@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
 import { Header, Footer } from "./components/index";
-import { Outlet } from "react-router-dom";
+import { Outlet, ScrollRestoration } from "react-router-dom";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -46,8 +46,8 @@ function App() {
       <main id="main" tabIndex={-1} className="flex-1 outline-none">
         <Outlet />
       </main>
-
       <Footer />
+      <ScrollRestoration />
     </div>
   ) : null;
 }
