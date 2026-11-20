@@ -27,6 +27,8 @@ import Comments from "./Comments.jsx"
 import MyPosts from "../pages/MyPosts.jsx"
 import Profile from "../pages/Profile.jsx"
 import LoadError from "./LoadError.jsx"
+import RelatedStories from "./RelatedStories.jsx"
+
 export {
    Header,
    Footer,
@@ -56,5 +58,6 @@ export {
    Comments,
    MyPosts,
    Profile,
-   LoadError
+   LoadError,
+   RelatedStories
 }

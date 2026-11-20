@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import appwriteService from "../appwrite/config";
-import { Button, Comments, Container, NotFound, UpvoteButton } from "../components";
+import {
+  Button,
+  Comments,
+  Container,
+  NotFound,
+  UpvoteButton,
+} from "../components";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 import { useSelector } from "react-redux";
@@ -28,7 +34,7 @@ export default function Post() {
     } else navigate("/");
   }, [slug, navigate]);
 
-    const deletePost = async () => {
+  const deletePost = async () => {
     if (!window.confirm("Delete this post? This cannot be undone.")) return;
     setError("");
     if (await appwriteService.removePost(post)) navigate("/");
@@ -65,16 +71,16 @@ export default function Post() {
           </h1>
           <p className="mt-5 border-y border-fg py-3 text-xs font-semibold uppercase tracking-wider text-mute">
             {post.authorName && (
-  <>
-    <Link
-      to={`/author/${post.userId}`}
-      className="transition hover:text-accent"
-    >
-      By {post.authorName}
-    </Link>
-    {" · "}
-  </>
-)}
+              <>
+                <Link
+                  to={`/author/${post.userId}`}
+                  className="transition hover:text-accent"
+                >
+                  By {post.authorName}
+                </Link>
+                {" · "}
+              </>
+            )}
             {formatDate(post.$createdAt)} · {readMinutes(post.content)} min read
           </p>
           {isAuthor && (
@@ -93,7 +99,11 @@ export default function Post() {
                 <Button variant="danger" size="sm" onClick={deletePost}>
                   Delete
                 </Button>
-                              {error && <p role="alert" className="w-full text-sm text-danger">{error}</p>}
+                {error && (
+                  <p role="alert" className="w-full text-sm text-danger">
+                    {error}
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -112,6 +122,7 @@ export default function Post() {
           <UpvoteButton postId={post.$id} />
           <Comments postId={post.$id} postAuthorId={post.userId} />
         </div>
+        <RelatedStories post={post} />
       </article>
     </Container>
   ) : null;
