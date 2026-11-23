@@ -28,7 +28,7 @@ import MyPosts from "../pages/MyPosts.jsx"
 import Profile from "../pages/Profile.jsx"
 import LoadError from "./LoadError.jsx"
 import RelatedStories from "./RelatedStories.jsx"
-
+import ShareButton from "./ShareButton.jsx"
 export {
    Header,
    Footer,
@@ -59,5 +59,6 @@ export {
    MyPosts,
    Profile,
    LoadError,
-   RelatedStories
+   RelatedStories,
+   ShareButton
 }

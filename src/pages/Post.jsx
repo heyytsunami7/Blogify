@@ -7,7 +7,8 @@ import {
   Container,
   NotFound,
   UpvoteButton,
-  RelatedStories
+  RelatedStories,
+  ShareButton
 } from "../components";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
@@ -119,8 +120,11 @@ export default function Post() {
         <div className="browser-css mx-auto max-w-[700px]">
           {parse(DOMPurify.sanitize(post.content))}
         </div>
-        <div className="mx-auto mt-10 max-w-[700px]">
-          <UpvoteButton postId={post.$id} />
+                <div className="mx-auto mt-10 max-w-[700px]">
+          <div className="flex flex-wrap items-center gap-3">
+            <UpvoteButton postId={post.$id} />
+            <ShareButton title={post.title} />
+          </div>
           <Comments postId={post.$id} postAuthorId={post.userId} />
         </div>
         <RelatedStories post={post} />
