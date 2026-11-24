@@ -7,18 +7,43 @@ import appwriteService from "../../appwrite/config";
 import { fieldClass, labelClass } from "../Input";
 import { parseTags, slugTransform } from "../../utils/post";
 
+const DRAFT_KEY = "blogify-draft";
+const readDraft = () => {
+  try {
+    return JSON.parse(localStorage.getItem(DRAFT_KEY));
+  } catch {
+    return null;
+  }
+};
+const saveDraft = (draft) => {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  } catch {
+    /* storage blocked or full */
+  }
+};
+const clearDraft = () => {
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    /* storage blocked */
+  }
+};
+
 function PostForm({ post }) {
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const { register, handleSubmit, watch, setValue, control, getValues } =
+  const [saved] = useState(() => (post ? null : readDraft()));
+  const [restored, setRestored] = useState(Boolean(saved));
+  const { register, handleSubmit, watch, setValue, control, getValues, reset } =
     useForm({
       defaultValues: {
-        title: post?.title || "",
-        slug: post?.$id || "",
-        content: post?.content || "",
+        title: post?.title || saved?.title || "",
+        slug: post?.$id || slugTransform(saved?.title || ""),
+        content: post?.content || saved?.content || "",
         status: post?.status || "published",
-        tags: post?.tags?.join(", ") || "",
-        summary: post?.summary || "",
+        tags: post?.tags?.join(", ") || saved?.tags || "",
+        summary: post?.summary || saved?.summary || "",
       },
     });
 
@@ -55,6 +80,7 @@ function PostForm({ post }) {
     if (dbPost) {
       // Delete the old image only once the new one is safely saved.
       if (post && file) appwriteService.deleteFile(post.featuredImage);
+      if (!post) clearDraft();
       navigate(`/post/${dbPost.$id}`);
     } else {
       // Don't leave the new image orphaned in storage.
@@ -80,6 +106,33 @@ function PostForm({ post }) {
     return () => subscription.unsubscribe();
   }, [watch, setValue, post]);
 
+  // Autosave a new post's text in this browser so a crash or a stray click doesn't lose it.
+  useEffect(() => {
+    if (post) return;
+    let timer;
+    const subscription = watch((value) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const { title, content, tags, summary } = value;
+        if (title || tags || summary || (content && content !== "<p><br></p>")) {
+          saveDraft({ title, content, tags, summary });
+        } else {
+          clearDraft();
+        }
+      }, 800);
+    });
+    return () => {
+      clearTimeout(timer);
+      subscription.unsubscribe();
+    };
+  }, [watch, post]);
+
+  const startOver = () => {
+    clearDraft();
+    reset({ title: "", slug: "", content: "", status: "published", tags: "", summary: "" });
+    setRestored(false);
+  };
+
   return (
     <form
       onSubmit={handleSubmit(submit)}
@@ -96,6 +149,18 @@ function PostForm({ post }) {
             className="mb-5 rounded-[10px] border-l-4 border-danger bg-bg2 px-4 py-3 text-sm font-medium"
           >
             {error}
+          </p>
+        )}
+        {restored && (
+          <p className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[10px] border border-line bg-bg2 px-4 py-3 text-sm font-medium">
+            We restored your unsaved draft.
+            <button
+              type="button"
+              onClick={startOver}
+              className="cursor-pointer border-b border-current text-xs font-semibold uppercase tracking-wider hover:text-accent"
+            >
+              Start over
+            </button>
           </p>
         )}
         <div className="space-y-5">
