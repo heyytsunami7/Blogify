@@ -8,8 +8,9 @@ import {
   NotFound,
   UpvoteButton,
   RelatedStories,
-  ShareButton
-} from "../components";
+  ShareButton,
+  ReadingProgress
+} from "../components/index";
 import parse from "html-react-parser";
 import DOMPurify from "dompurify";
 import { useSelector } from "react-redux";
@@ -47,6 +48,7 @@ export default function Post() {
 
   return post ? (
     <Container>
+      <ReadingProgress />
       <article className="mx-auto max-w-[880px] pb-6 pt-9">
         <Link
           to="/"

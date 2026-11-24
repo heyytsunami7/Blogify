@@ -29,6 +29,7 @@ import Profile from "../pages/Profile.jsx"
 import LoadError from "./LoadError.jsx"
 import RelatedStories from "./RelatedStories.jsx"
 import ShareButton from "./ShareButton.jsx"
+import ReadingProgress from "./ReadingProgress.jsx"
 export {
    Header,
    Footer,
@@ -60,5 +61,6 @@ export {
    Profile,
    LoadError,
    RelatedStories,
-   ShareButton
+   ShareButton,
+   ReadingProgress
 }
