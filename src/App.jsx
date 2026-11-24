@@ -5,7 +5,7 @@ import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
 import { Header, Footer } from "./components/index";
 import { Outlet, ScrollRestoration } from "react-router-dom";
-
+import { Analytics } from "@vercel/analytics/react";
 function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
@@ -48,6 +48,7 @@ function App() {
       </main>
       <Footer />
       <ScrollRestoration />
+      <Analytics />
     </div>
   ) : null;
 }
